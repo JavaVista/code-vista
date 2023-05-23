@@ -1,5 +1,5 @@
 import { component$, Slot } from '@builder.io/qwik';
-import { Nav } from '~/components/router-head/nav/nav';
+import { Nav } from '~/components/nav/nav';
 
 export default component$(() => {
   return (
