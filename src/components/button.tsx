@@ -19,7 +19,7 @@ export const Button = component$((props: ItemsProps) => {
     })
 
     return (
-        <button onClick$={handleClick} class="bg-blue-500 py-2 px-4 px-4 rounded-sm text-white hover:bg-sky-400">
+        <button onClick$={handleClick} class="bg-blue-500 py-2 px-4 rounded-sm text-white hover:bg-sky-400">
             Hello Qwik!
         </button>
     );

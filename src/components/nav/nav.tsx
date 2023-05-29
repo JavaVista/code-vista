@@ -15,6 +15,9 @@ export const Nav = component$(() => {
                     <li>
                         <Link href="/test">Test</Link>
                     </li>
+                    <li>
+                        <Link href="/signup">Sign up</Link>
+                    </li>
                 </ul>
             </div>
         </div>
