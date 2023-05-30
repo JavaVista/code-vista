@@ -5,14 +5,15 @@ import {
     InGithubCircle,
     InKeyAltPlus,
 } from '@qwikest/icons/iconoir';
-import { IMessage, Message } from '~/components/message/message';
+import { type IMessage, Message } from '~/components/message/message';
 import { validateEmail } from '~/utils/helpers';
+import { supabase } from '~/utils/supabase';
 
 export default component$(() => {
     const message: IMessage = useStore({ message: undefined, status: 'error' });
     const isLoading = useSignal(false);
 
-    const handleEmailSignUp = $((event: any) => {
+    const handleEmailSignUp = $(async (event: any) => {
         // initialize message
         message.message = undefined;
         message.status = 'error';
@@ -30,12 +31,36 @@ export default component$(() => {
             isLoading.value = false;
             return;
         }
-        if(!isTerms) {
+        if (!isTerms) {
             message.message = 'Please accept the terms, privacy and disclaimer';
             message.status = 'error';
             isLoading.value = false;
             return;
         }
+
+        // set supabase user
+        const timestamp = Date.now();
+        const pwd =
+            Math.floor(Math.random() * 1000000).toString() + email + timestamp;
+
+        const { data, error } = await supabase.auth.signUp({
+            email: email,
+            password: pwd,
+        });
+
+        if (data?.user?.id) {
+            message.message =
+                'Success! Please, check your email inbox or spam folder';
+            message.status = 'success';
+            isLoading.value = false;
+            return;
+        } else {
+            message.message =
+                'Something went wrong creating a user! ' + error?.message;
+            isLoading.value = false;
+            return;
+        }
+
     });
 
     return (
@@ -97,7 +122,7 @@ export default component$(() => {
                                     Email address
                                 </label>
                                 <input
-                                    id='email'
+                                    id="email"
                                     class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                                     type="email"
                                     placeholder="Email"
@@ -120,7 +145,7 @@ export default component$(() => {
                                 <div class="mt-6 mb-6 text-xs text-gray-600 text-center  ">
                                     <input
                                         type="checkbox"
-                                        id='terms'
+                                        id="terms"
                                         class="inline-block mr-2"
                                         name="terms"
                                     />
