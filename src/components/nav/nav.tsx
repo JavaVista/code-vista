@@ -1,25 +1,83 @@
-import { component$, useStylesScoped$ } from '@builder.io/qwik';
+import { component$, useSignal, useStylesScoped$ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 import styles from './nav.css?inline';
 
 export const Nav = component$(() => {
     useStylesScoped$(styles);
+    const isOpenSignal = useSignal(false);
+
     return (
-        <div class="flex items-center justify-between bg-white shadow-xl py-5">
-            <div  class="ml-5 handwrite-font">Logo</div>
-            <div class="mr-5">
-                <ul class="flex space-x-4">
-                    <li>
-                        <Link href="/">Home</Link>
-                    </li>
-                    <li>
-                        <Link href="/test">Test</Link>
-                    </li>
-                    <li>
-                        <Link href="/signup">Sign up</Link>
-                    </li>
-                </ul>
+        <nav class="w-full bg-gray-800 text-gray-100 body-font mb-4 shadow-xl sticky">
+            {/* :DESKTOP MENU */}
+            <div class="container mx-auto flex justify-between items-center py-7 px-5">
+                <Link
+                    href="/"
+                    class="flex flex-shrink-0 title-font font-medium items-center text-gray-900 md:mb-0"
+                >
+                    <img
+                        src="/images/computers_attacking_400x400.jpg"
+                        class="w-20 h-20 text-white p-2 bg-gradient-to-br rounded-full"
+                    />
+                    <div class="ml-3 text-xl text-gray-100 font-semibold antialiased handwrite-font">
+                        Code-Vista
+                    </div>
+                </Link>
+                <div>
+                    <ul class="hidden md:ml-auto md:flex flex-wrap items-center justify-center text-base tracking-wide">
+                        <li class="mr-8 px-2 py-2 rounded-md hover:text-white hover:bg-gray-700">
+                            <Link href="/">Home</Link>
+                        </li>
+                        <li class="mr-8 px-2 py-2 rounded-md hover:text-white hover:bg-gray-700">
+                            <Link href="/test">Test</Link>
+                        </li>
+                        <li class="mr-8 px-2 py-2 rounded-md hover:text-white hover:bg-gray-700">
+                            <Link href="/login">Login</Link>
+                        </li>
+                        <li class="mr-8 px-2 py-2 rounded-md hover:text-white hover:bg-gray-700">
+                            <Link href="/signup">Sign up</Link>
+                        </li>
+                    </ul>
+                </div>
+                {/* Burger icon standard */}
+                <button
+                    class="md:hidden rounded-md active:outline-none focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                    onClick$={() => (isOpenSignal.value = !isOpenSignal.value)}
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-8 w-8 rounded-md text-gray-100 font-semibold  bg-gradient-to-br from-transparent to-transparent hover:text-gray-300"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 6h16M4 12h16M4 18h16"
+                        />
+                    </svg>
+                </button>
             </div>
-        </div>
+            {/* :MOBILE MENU */}
+            {isOpenSignal.value && (
+                <div>
+                    <ul class="w-full flex flex-col py-4 px-3 md:hidden shadow-xl sticky text-base uppercase text-center font-semibold">
+                        <li class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
+                            <Link href="/">Home</Link>
+                        </li>
+                        <li class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
+                            <Link href="/test">Test</Link>
+                        </li>
+                        <li class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
+                            <Link href="/login">Login</Link>
+                        </li>
+                        <li class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
+                            <Link href="/signup">Sign up</Link>
+                        </li>
+                    </ul>
+                </div>
+            )}
+        </nav>
     );
 });

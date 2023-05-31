@@ -1,5 +1,5 @@
 import { component$ } from '@builder.io/qwik';
-import { DocumentHead, Link } from '@builder.io/qwik-city';
+import { type DocumentHead, Link } from '@builder.io/qwik-city';
 
 export default component$(() => {
     return (
@@ -29,7 +29,7 @@ export const head: DocumentHead = {
     meta: [
         {
             name: 'description',
-            content: 'Home',
+            content: 'Code-Vista Home',
         },
     ],
 };

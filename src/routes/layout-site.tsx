@@ -9,12 +9,13 @@ export default component$(() => {
                 <section>
                     <Slot />
                 </section>
+
+                <footer>
+                    <div class="bg-gray-900 text-white py-14 text-center">
+                        Javier Carrion 2023
+                    </div>
+                </footer>
             </main>
-            <footer>
-                <div class="bg-gray-900 text-white py-14 text-center">
-                    Javier Carrion 2023
-                </div>
-            </footer>
         </>
     );
 });

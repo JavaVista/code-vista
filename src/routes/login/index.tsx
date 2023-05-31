@@ -3,7 +3,7 @@ import { DocumentHead, Link } from '@builder.io/qwik-city';
 import {
     InGoogleCircle,
     InGithubCircle,
-    InKeyAltPlus,
+    InLogIn,
 } from '@qwikest/icons/iconoir';
 import { type IMessage, Message } from '~/components/message/message';
 import { validateEmail } from '~/utils/helpers';
@@ -13,7 +13,8 @@ export default component$(() => {
     const message: IMessage = useStore({ message: undefined, status: 'error' });
     const isLoading = useSignal(false);
 
-    const handleEmailSignUp = $(async (event: any) => {
+
+    const handleEmailLogin = $(async (event: any) => {
         // initialize message
         message.message = undefined;
         message.status = 'error';
@@ -21,7 +22,6 @@ export default component$(() => {
 
         // extract values
         const email = event.target.email.value;
-        const isTerms = event.target.terms.checked;
         const isEmailValid = validateEmail(email);
 
         // handle validations
@@ -31,24 +31,19 @@ export default component$(() => {
             isLoading.value = false;
             return;
         }
-        if (!isTerms) {
-            message.message = 'Please accept the terms, privacy and disclaimer';
-            message.status = 'error';
-            isLoading.value = false;
-            return;
-        }
+      
 
-        // set supabase user
-        const timestamp = Date.now();
-        const pwd =
-            Math.floor(Math.random() * 1000000).toString() + email + timestamp;
-
-        const { data, error } = await supabase.auth.signUp({
+        const stagingUrl = 'http://127.0.0.1:5173/login/staging/';
+        
+        // sign in supabase user
+        const { data, error } = await supabase.auth.signInWithOtp({
             email: email,
-            password: pwd,
+            options: {
+                emailRedirectTo: stagingUrl,
+            }
         });
 
-        if (data?.user?.id) {
+        if (data && !error) {
             message.message =
                 'Success! Please, check your email inbox or spam folder';
             message.status = 'success';
@@ -75,15 +70,15 @@ export default component$(() => {
                     </Link>
                     <div class="mt-12 flex flex-col items-center">
                         <h2 class="text-2xl xl:text-3xl font-extrabold">
-                            Sign up
+                            Log in
                         </h2>
                         <p class="mt-2 text-gray-600">
                             Or{' '}
                             <Link
-                                href="/login"
+                                href="/signup"
                                 class="font-medium text-indigo-700 hover:text-indigo-400"
                             >
-                                Login to your account
+                                Create your account
                             </Link>
                         </p>
                         <div class="w-full flex-1 mt-8">
@@ -93,7 +88,7 @@ export default component$(() => {
                                         <InGoogleCircle class="w-6 h-6" />
                                     </div>
                                     <span class="ml-4 hover:text-gray-100">
-                                        Sign Up with Google
+                                        Log in with Google
                                     </span>
                                 </button>
 
@@ -102,19 +97,19 @@ export default component$(() => {
                                         <InGithubCircle class=" w-6 h-6" />
                                     </div>
                                     <span class="ml-4 hover:text-gray-100">
-                                        Sign Up with GitHub
+                                        Log in with GitHub
                                     </span>
                                 </button>
                             </div>
 
                             <div class="my-12 border-b text-center">
                                 <div class="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
-                                    Or sign up with e-mail
+                                    Or log in with e-mail
                                 </div>
                             </div>
 
                             <form
-                                onSubmit$={handleEmailSignUp}
+                                onSubmit$={handleEmailLogin}
                                 preventdefault:submit
                                 class="mx-auto max-w-xs"
                             >
@@ -135,40 +130,23 @@ export default component$(() => {
                                     disabled={isLoading.value}
                                     type="submit"
                                 >
-                                    <InKeyAltPlus class="w-6 h-6 -ml-2" />
-                                    <span class="ml-3">Sign Up</span>
+                                    <InLogIn class="w-6 h-6 -ml-2" />
+                                    <span class="ml-3">Log In</span>
                                 </button>
                                 <p class="text-center text-xs text-gray-600 mt-1">
                                     No password required. Authorize via email.
                                 </p>
 
                                 <div class="mt-6 mb-6 text-xs text-gray-600 text-center  ">
-                                    <input
-                                        type="checkbox"
-                                        id="terms"
-                                        class="inline-block mr-2"
-                                        name="terms"
-                                    />
                                     <span>
-                                        I agree to the{' '}
+                            
                                         <Link
                                             href="/terms"
-                                            class="border-b border-gray-500 border-dotted hover:text-indigo-700 hover:font-bold"
+                                            
                                         >
-                                            Terms of Service,
-                                        </Link>{' '}
-                                        <Link
-                                            href="/privacy"
-                                            class="border-b border-gray-500 border-dotted hover:text-indigo-700 hover:font-bold"
-                                        >
-                                            Privacy Policy
-                                        </Link>{' '}
-                                        and{' '}
-                                        <Link href="/disclaimer">
-                                            <span class="border-b border-gray-500 border-dotted  hover:text-indigo-700 hover:font-bold">
-                                                Disclaimer
-                                            </span>
+                                            <button class="border-b border-gray-500 border-dotted hover:text-indigo-700 hover:font-bold">Problems signing in?</button>
                                         </Link>
+                                     
                                     </span>
                                 </div>
                                 <Message message={message} />
@@ -176,10 +154,10 @@ export default component$(() => {
                         </div>
                     </div>
                 </div>
-                <div class="flex-1 bg-indigo-100 text-center hidden lg:flex">
+                <div class="flex-1 bg-gray-50 text-center hidden lg:flex">
                     <div
                         class="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
-                        style="background-image: url('/images/officeCat.svg');"
+                        style="background-image: url('/images/officeWork.svg');"
                     ></div>
                 </div>
             </div>
@@ -188,11 +166,11 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-    title: 'Sign Up',
+    title: 'Login',
     meta: [
         {
             name: 'description',
-            content: 'Sign up for your account'
-        }
-    ]
-}
+            content: 'Login Page',
+        },
+    ],
+};
