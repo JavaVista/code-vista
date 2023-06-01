@@ -7,7 +7,7 @@ export const Nav = component$(() => {
     const isOpenSignal = useSignal(false);
 
     return (
-        <nav class="w-full bg-gray-800 text-gray-100 body-font mb-4 shadow-xl sticky">
+        <nav class="w-full bg-gray-800 text-gray-100 body-font mb-4 shadow-xl">
             {/* :DESKTOP MENU */}
             <div class="container mx-auto flex justify-between items-center py-7 px-5">
                 <Link
@@ -28,7 +28,7 @@ export const Nav = component$(() => {
                             <Link href="/">Home</Link>
                         </li>
                         <li class="mr-8 px-2 py-2 rounded-md hover:text-white hover:bg-gray-700">
-                            <Link href="/test">Test</Link>
+                            <Link href="/store">Store</Link>
                         </li>
                         <li class="mr-8 px-2 py-2 rounded-md hover:text-white hover:bg-gray-700">
                             <Link href="/login">Login</Link>

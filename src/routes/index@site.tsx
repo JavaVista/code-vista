@@ -7,7 +7,7 @@ export default component$(() => {
     return (
         <>
             <Hero />
-            <div class="py-12 justify-center mx-auto text-center space-y-3 sm:space-x-6 sm:space-y-0 sm:flex">
+            <div class="py-12 px-4 bg-gray-50 justify-center mx-auto text-center space-y-3 sm:space-x-6 sm:space-y-0 sm:flex">
                 <Link href="/members/dashboard">
                     <ActionButton label="Dashboard" />
                 </Link>

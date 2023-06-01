@@ -4,13 +4,13 @@ import { StandardButton } from '../buttons/standard-button';
 
 export const Hero = component$(() => {
     return (
-        <section class="flex flex-col justify-center min-h-screen mt-24 mx-auto max-w-screen-xl pb-4 px-4 sm:px-8">
+        <div class="flex flex-col justify-center py-24 mx-auto max-w-screen-xl px-4 sm:px-8">
             <div class="flex flex-col h-full items-center justify-center w-full">
                 <div class="text-text-gray-800 text-4xl sm:text-6xl md:text-6xl lg:text-7xl tracking-tighter font-extrabold">
                     It’s not a bug;
                 </div>
 
-                <div class="text-center space-y-4">
+                <div class="text-center space-y-4 w-full">
                     <h1 class="text-gray-800 font-bold text-4xl md:text-5xl">
                         it’s an undocumented
                         <span class="text-indigo-600"> feature</span>
@@ -34,6 +34,6 @@ export const Hero = component$(() => {
                     </Link>
                 </div>
             </div>
-        </section>
+        </div>
     );
 });
