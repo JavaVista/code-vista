@@ -1,7 +1,4 @@
-interface Link {
-    label: string;
-    url: string;
-}
+import type { Link } from '~/interfaces/link';
 
 export const links: Link[] = [
     { label: "About", url: "/about" },

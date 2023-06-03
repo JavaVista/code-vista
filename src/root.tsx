@@ -1,4 +1,9 @@
-import { component$, useVisibleTask$ } from '@builder.io/qwik';
+import {
+    component$,
+    useContextProvider,
+    useStore,
+    useVisibleTask$,
+} from '@builder.io/qwik';
 import {
     QwikCityProvider,
     RouterOutlet,
@@ -8,6 +13,8 @@ import { RouterHead } from './components/router-head/router-head';
 
 import './global.css';
 import { supabase } from './utils/supabase';
+import type { User } from './types/user.type';
+import { UserSessionContext } from './context/user-session';
 
 export default component$(() => {
     /**
@@ -16,25 +23,40 @@ export default component$(() => {
      *
      * Don't remove the `<head>` and `<body>` elements.
      */
+    const userSession: User = useStore({
+        userId: '',
+        isLoggedIn: false,
+    });
 
     useVisibleTask$(async () => {
         const { data: authListener } = supabase.auth.onAuthStateChange(
             async (event: string, session: any) => {
-                console.log(event);
-                console.log(session);
+                console.log('event: ', event);
+                console.log('session: ', session);
 
                 if (event === 'SIGNED_IN') {
                     // send cookie to server
+
+                    // set Auth state Context
+                    userSession.userId = session?.user?.id;
+                    userSession.isLoggedIn = true;
                 }
 
                 if (event === 'SIGNED_OUT') {
                     // sign out user
+
+                    // set Auth state Context
+                    userSession.userId = '';
+                    userSession.isLoggedIn = false;
                 }
             }
         );
 
         return () => authListener?.subscription?.unsubscribe();
     });
+
+    // pass state to child components
+    useContextProvider(UserSessionContext, userSession);
 
     return (
         <QwikCityProvider>

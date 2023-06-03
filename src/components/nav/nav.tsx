@@ -1,10 +1,41 @@
-import { component$, useSignal, useStylesScoped$ } from '@builder.io/qwik';
-import { Link } from '@builder.io/qwik-city';
+import {
+    component$,
+    useSignal,
+    useStylesScoped$,
+    $,
+    useTask$,
+    useContext,
+} from '@builder.io/qwik';
+import { Link, useNavigate } from '@builder.io/qwik-city';
 import styles from './nav.css?inline';
+import { ActionButton } from '../buttons/action-button';
+import { UserSessionContext } from '~/context/user-session';
+import { supabase } from '~/utils/supabase';
 
 export const Nav = component$(() => {
+    const userSession = useContext(UserSessionContext);
     useStylesScoped$(styles);
     const isOpenSignal = useSignal(false);
+    const inSession = useSignal(false);
+    const homeUrl = '/';
+    const nav = useNavigate();
+
+    const handleLogout = $(async () => {
+        // server side
+
+        // client side
+        await supabase.auth.signOut();
+        nav(homeUrl);
+    });
+
+    useTask$(({ track }) => {
+        track(userSession);
+        if (userSession?.isLoggedIn) {
+            inSession.value = true;
+        } else {
+            inSession.value = false;
+        }
+    });
 
     return (
         <nav class="w-full bg-gray-800 text-gray-100 body-font mb-4 shadow-xl">
@@ -30,12 +61,34 @@ export const Nav = component$(() => {
                         <li class="mr-8 px-2 py-2 rounded-md hover:text-white hover:bg-gray-700">
                             <Link href="/store">Store</Link>
                         </li>
-                        <li class="mr-8 px-2 py-2 rounded-md hover:text-white hover:bg-gray-700">
-                            <Link href="/login">Login</Link>
-                        </li>
-                        <li class="mr-8 px-2 py-2 rounded-md hover:text-white hover:bg-gray-700">
-                            <Link href="/signup">Sign up</Link>
-                        </li>
+                        {inSession.value && (
+                            <>
+                                <li class="mr-8 px-2 py-2 rounded-md hover:text-white hover:bg-gray-700">
+                                    <button
+                                        onClick$={() => {
+                                            handleLogout();
+                                        }}
+                                    >
+                                        Logout
+                                    </button>
+                                </li>
+                                <li class="mr-8 px-2 py-2 rounded-md hover:text-white hover:bg-gray-700">
+                                    <Link href="/members/dashboard">
+                                        <ActionButton label="Dashboard" />
+                                    </Link>
+                                </li>
+                            </>
+                        )}
+                        {!inSession.value && (
+                            <>
+                                <li class="mr-8 px-2 py-2 rounded-md hover:text-white hover:bg-gray-700">
+                                    <Link href="/login">Login</Link>
+                                </li>
+                                <li class="mr-8 px-2 py-2 rounded-md hover:text-white hover:bg-gray-700">
+                                    <Link href="/signup">Sign up</Link>
+                                </li>
+                            </>
+                        )}
                     </ul>
                 </div>
                 {/* Burger icon standard */}
@@ -62,19 +115,41 @@ export const Nav = component$(() => {
             {/* :MOBILE MENU */}
             {isOpenSignal.value && (
                 <div>
-                    <ul class="w-full flex flex-col py-4 px-3 md:hidden shadow-xl sticky text-base uppercase text-center font-semibold">
+                    <ul class="w-full flex flex-col py-4 px-3 md:hidden shadow-xl  text-base uppercase text-center font-semibold">
                         <li class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
                             <Link href="/">Home</Link>
                         </li>
                         <li class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
                             <Link href="/test">Test</Link>
                         </li>
-                        <li class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
-                            <Link href="/login">Login</Link>
-                        </li>
-                        <li class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
-                            <Link href="/signup">Sign up</Link>
-                        </li>
+                        {inSession.value && (
+                            <>
+                                <li class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
+                                    <button
+                                        onClick$={() => {
+                                            handleLogout();
+                                        }}
+                                    >
+                                        Logout
+                                    </button>
+                                </li>
+                                <li class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
+                                    <Link href="/members/dashboard">
+                                        <ActionButton label="Dashboard" />
+                                    </Link>
+                                </li>
+                            </>
+                        )}
+                        {!inSession.value && (
+                            <>
+                                <li class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
+                                    <Link href="/login">Login</Link>
+                                </li>
+                                <li class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
+                                    <Link href="/signup">Sign up</Link>
+                                </li>
+                            </>
+                        )}
                     </ul>
                 </div>
             )}

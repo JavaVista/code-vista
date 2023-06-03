@@ -1,7 +1,7 @@
 import { component$, Slot } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 import { Nav } from '~/components/nav/nav';
-import { links } from '~/interfaces/links';
+import { links } from '~/constants/links';
 
 export default component$(() => {
     return (
@@ -31,7 +31,7 @@ export default component$(() => {
                             );
                         })}
                     </nav>
-                    <p class=" text-left text-xs text-gray-400">
+                    <p class="pt-4 text-left text-xs text-gray-400">
                         &copy; 2023 Javier Carrion
                     </p>
                 </div>

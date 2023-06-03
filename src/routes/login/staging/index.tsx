@@ -1,22 +1,31 @@
-import { component$, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import {
+    component$,
+    useContext,
+    useSignal,
+    useVisibleTask$,
+} from '@builder.io/qwik';
 import { DocumentHead, Link, useNavigate } from '@builder.io/qwik-city';
+import { UserSessionContext } from '~/context/user-session';
 import { supabase } from '~/utils/supabase';
 
 export default component$(() => {
+    const userSession = useContext(UserSessionContext);
     const isProtectedOk = useSignal(false);
     const nav = useNavigate();
 
     useVisibleTask$(async () => {
         const timeout = setTimeout(async () => {
             const { data, error } = await supabase.auth.getUser();
-            console.log('🤜 👉 file: index.tsx:12 👉 data:', data);
-
             if (data?.user?.id && !error) {
                 isProtectedOk.value = true;
-                await nav('/members/dashboard');
+                userSession.userId = data?.user?.id;
+                userSession.isLoggedIn = true;
+                // nav('/members/dashboard');
             } else {
                 console.log(error);
-                await nav('/login');
+                userSession.userId = '';
+                userSession.isLoggedIn = false;
+                nav('/login');
             }
         }, 500);
         return () => clearTimeout(timeout);
