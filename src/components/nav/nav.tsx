@@ -126,9 +126,7 @@ export const Nav = component$(() => {
                             <>
                                 <li class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
                                     <button
-                                        onClick$={() => {
-                                            handleLogout();
-                                        }}
+                                        onClick$={handleLogout}
                                     >
                                         Logout
                                     </button>

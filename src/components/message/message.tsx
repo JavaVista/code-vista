@@ -17,7 +17,7 @@ export const Message = component$(({ message, classText }: Props) => {
                 <div
                     class={
                         classText +
-                        'transition-all duration-600 text-sm border border-gray-300 py-2 px-4 w-full animate-bounce' +
+                        'transition-all duration-600 text-sm border-2 border-gray-300 py-2 px-4 w-full animate-bounce' +
                         (message.status === 'error' &&
                             ' text-red-600 bg-red-50 border-red-600') +
                         (message.status === 'warning' &&

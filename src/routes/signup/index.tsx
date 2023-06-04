@@ -1,5 +1,5 @@
 import { component$, useStore, $, useSignal } from '@builder.io/qwik';
-import type { DocumentHead} from '@builder.io/qwik-city';
+import type { DocumentHead } from '@builder.io/qwik-city';
 import { Link } from '@builder.io/qwik-city';
 import {
     InGoogleCircle,
@@ -13,6 +13,22 @@ import { supabase } from '~/utils/supabase';
 export default component$(() => {
     const message: IMessage = useStore({ message: undefined, status: 'error' });
     const isLoading = useSignal(false);
+    const stagingUrl = 'http://127.0.0.1:5173/login/staging/';
+
+    const handleGithubSignUp = $(async () => {
+        /* TODO: In the login page, check if the email exists for that provider. If it does not exist, direct the user to the sign-up page.
+        On the sign-up page, check if the terms are valid.
+        For now, implemented a tooltip that states that by logging in or signing up, the user is automatically accepting the terms. */
+
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: 'github',
+            options: {
+                redirectTo: stagingUrl,
+            },
+        });
+        console.log('🤜 👉 file: index.tsx:21 👉 data:', data);
+        console.log('🤜 👉  👉 error:', error);
+    });
 
     const handleEmailSignUp = $(async (event: any) => {
         // initialize message
@@ -61,7 +77,6 @@ export default component$(() => {
             isLoading.value = false;
             return;
         }
-
     });
 
     return (
@@ -88,7 +103,7 @@ export default component$(() => {
                             </Link>
                         </p>
                         <div class="w-full flex-1 mt-8">
-                            <div class="flex flex-col items-center">
+                            <div class="flex flex-col items-center group relative">
                                 <button class="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline mt-5 hover:bg-indigo-700 ">
                                     <div class="bg-white rounded-full hover:text-gray-800">
                                         <InGoogleCircle class="w-6 h-6" />
@@ -98,7 +113,10 @@ export default component$(() => {
                                     </span>
                                 </button>
 
-                                <button class="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline mt-5 hover:bg-indigo-700">
+                                <button
+                                    onClick$={handleGithubSignUp}
+                                    class="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline mt-5 hover:bg-indigo-700"
+                                >
                                     <div class="bg-white rounded-full hover:text-gray-800 ">
                                         <InGithubCircle class=" w-6 h-6" />
                                     </div>
@@ -106,6 +124,11 @@ export default component$(() => {
                                         Sign Up with GitHub
                                     </span>
                                 </button>
+                                <span class="pointer-events-none absolute -top-7 left-0 w-max rounded bg-yellow-50 border-2  text-yellow-600 border-yellow-600 px-2 py-1 text-sm font-medium  opacity-0 shadow transition-opacity group-hover:opacity-100">
+                                    {' '}
+                                    By signing up, you agree to our Terms of
+                                    Service, Privacy Policy and Disclaimer{' '}
+                                </span>
                             </div>
 
                             <div class="my-12 border-b text-center">
@@ -132,9 +155,9 @@ export default component$(() => {
                                 />
 
                                 <button
-                                    class="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none disabled:bg-gray-500"
-                                    disabled={isLoading.value}
                                     type="submit"
+                                    disabled={isLoading.value}
+                                    class="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none disabled:bg-gray-500"
                                 >
                                     <InKeyAltPlus class="w-6 h-6 -ml-2" />
                                     <span class="ml-3">Sign Up</span>
@@ -193,7 +216,7 @@ export const head: DocumentHead = {
     meta: [
         {
             name: 'description',
-            content: 'Sign up for your account'
-        }
-    ]
-}
+            content: 'Sign up for your account',
+        },
+    ],
+};

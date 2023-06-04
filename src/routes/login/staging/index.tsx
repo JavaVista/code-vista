@@ -20,7 +20,7 @@ export default component$(() => {
                 isProtectedOk.value = true;
                 userSession.userId = data?.user?.id;
                 userSession.isLoggedIn = true;
-                // nav('/members/dashboard');
+                nav('/members/dashboard');
             } else {
                 console.log(error);
                 userSession.userId = '';
