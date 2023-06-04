@@ -115,7 +115,7 @@ export default component$(() => {
                                         Log in with GitHub
                                     </span>
                                 </button>
-                                <span class="pointer-events-none absolute -top-7 left-0 w-max rounded bg-yellow-50 border-2  text-yellow-600 border-yellow-600 px-2 py-1 text-sm font-medium  opacity-0 shadow transition-opacity group-hover:opacity-100">
+                                <span class="pointer-events-none absolute top:50% left:50% transform:translate(-50%,-50%) -top-5 w-max rounded bg-yellow-50 border-2  text-yellow-600 border-yellow-600 px-2 py-1 text-sm font-medium  opacity-0 shadow transition-opacity group-hover:opacity-100">
                                     {' '}
                                     By logging in, you agree to our Terms of
                                     Service, Privacy Policy and Disclaimer{' '}
