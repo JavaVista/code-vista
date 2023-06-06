@@ -14,6 +14,7 @@ export default component$(() => {
     const message: IMessage = useStore({ message: undefined, status: 'error' });
     const isLoading = useSignal(false);
     const stagingUrl = 'http://127.0.0.1:5173/login/staging/';
+    // TODO: add google signup
 
     const handleGithubSignUp = $(async () => {
         /* TODO: In the login page, check if the email exists for that provider. If it does not exist, direct the user to the sign-up page.
