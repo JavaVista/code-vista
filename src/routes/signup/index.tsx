@@ -7,13 +7,14 @@ import {
     InKeyAltPlus,
 } from '@qwikest/icons/iconoir';
 import { type IMessage, Message } from '~/components/message/message';
+import { REDIRECT_URL } from '~/constants/redirect-url';
 import { validateEmail } from '~/utils/helpers';
 import { supabase } from '~/utils/supabase';
 
 export default component$(() => {
     const message: IMessage = useStore({ message: undefined, status: 'error' });
     const isLoading = useSignal(false);
-    const stagingUrl = 'http://127.0.0.1:5173/login/staging/';
+
     // TODO: add google signup
 
     const handleGithubSignUp = $(async () => {
@@ -24,7 +25,7 @@ export default component$(() => {
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: 'github',
             options: {
-                redirectTo: stagingUrl,
+                redirectTo: REDIRECT_URL,
             },
         });
         console.log('🤜 👉 file: index.tsx:21 👉 data:', data);
