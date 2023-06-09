@@ -32,11 +32,21 @@ export default component$(() => {
     });
 
     useVisibleTask$(async () => {
+        const { data } = await supabase.auth.getUser();
+        // set Auth state Context
+        if (data && data?.user?.id) {
+            console.log('🤜 👉 file: root.tsx:38 👉 data:', data);
+            userSession.userId = data.user.id;
+            userSession.isLoggedIn = true;
+        } else {
+            userSession.userId = '';
+            userSession.isLoggedIn = false;
+        }
+    });
+
+    useVisibleTask$(async () => {
         const { data: authListener } = supabase.auth.onAuthStateChange(
             async (event: AuthChangeEvent, session: Session | null) => {
-                console.log('event: ', event);
-                console.log('session: ', session);
-
                 if (
                     event === 'SIGNED_IN' &&
                     session?.access_token &&
@@ -54,7 +64,7 @@ export default component$(() => {
                             withCredentials: true,
                         })
                         .then(res => {
-                            console.log(res);
+                            console.log(res.data);
 
                             // set Auth state Context
                             userSession.userId = session?.user?.id;
@@ -66,11 +76,19 @@ export default component$(() => {
                 }
 
                 if (event === 'SIGNED_OUT') {
-                    // sign out user
+                    // sign out user on server
+                    await axios
+                        .get('/api_v1/logout')
+                        .then(res => {
+                            console.log(res.data);
 
-                    // set Auth state Context
-                    userSession.userId = '';
-                    userSession.isLoggedIn = false;
+                            // set Auth state Context
+                            userSession.userId = '';
+                            userSession.isLoggedIn = false;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
                 }
             }
         );
