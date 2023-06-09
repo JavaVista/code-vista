@@ -47,6 +47,7 @@
   "dependencies": {
     "@qwikest/icons": "^0.0.8",
     "@supabase/supabase-js": "^2.23.0",
+    "axios": "^1.4.0",
     "supabase-auth-helpers-qwik": "^0.0.3"
   }
 }
