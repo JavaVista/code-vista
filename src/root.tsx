@@ -35,7 +35,6 @@ export default component$(() => {
         const { data } = await supabase.auth.getUser();
         // set Auth state Context
         if (data && data?.user?.id) {
-            console.log('🤜 👉 file: root.tsx:38 👉 data:', data);
             userSession.userId = data.user.id;
             userSession.isLoggedIn = true;
         } else {

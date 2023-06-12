@@ -4,7 +4,9 @@ import {
     useSignal,
     useVisibleTask$,
 } from '@builder.io/qwik';
-import { DocumentHead, Link, useNavigate } from '@builder.io/qwik-city';
+import type { DocumentHead} from '@builder.io/qwik-city';
+import { Link, useNavigate } from '@builder.io/qwik-city';
+import axios from 'axios';
 import { UserSessionContext } from '~/context/user-session';
 import { supabase } from '~/utils/supabase';
 
@@ -16,6 +18,35 @@ export default component$(() => {
     useVisibleTask$(async () => {
         const timeout = setTimeout(async () => {
             const { data, error } = await supabase.auth.getUser();
+
+            const {
+                data: { session },
+            } = await supabase.auth.getSession();
+
+            if (session) {
+                // send cookie to server
+                const body = {
+                    accessToken: session.access_token,
+                    refreshToken: session.refresh_token,
+                };
+
+                // send request to server
+                await axios
+                    .post('/api_v1/store-auth', body, {
+                        withCredentials: true,
+                    })
+                    .then(res => {
+                        console.log(res.data);
+
+                        // set Auth state Context
+                        userSession.userId = session?.user?.id;
+                        userSession.isLoggedIn = true;
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            }
+
             if (data?.user?.id && !error) {
                 isProtectedOk.value = true;
                 userSession.userId = data?.user?.id;

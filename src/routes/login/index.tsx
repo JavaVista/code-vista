@@ -28,8 +28,17 @@ export default component$(() => {
                 redirectTo: REDIRECT_URL,
             },
         });
-        console.log('🤜 👉 file: index.tsx:21 👉 data:', data);
-        console.log('🤜 👉  👉 error:', error);
+        if (data) {
+            message.message = 'Success! proceeded to login in';
+            message.status = 'success';
+            isLoading.value = false;
+            return;
+        } else {
+            message.message =
+                'Something went wrong login the user! ' + error?.message;
+            isLoading.value = false;
+            return;
+        }
     });
 
     const handleEmailLogin = $(async (event: any) => {

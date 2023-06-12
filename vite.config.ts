@@ -11,5 +11,10 @@ export default defineConfig(() => {
         'Cache-Control': 'public, max-age=600',
       },
     },
+    // to run dev on proxy 
+    // server: {
+    //   host: true,
+    //   port: 3000,
+    // }
   };
 });
