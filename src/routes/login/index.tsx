@@ -170,7 +170,7 @@ export default component$(() => {
 
                                 <div class="mt-6 mb-6 text-xs text-gray-600 text-center  ">
                                     <span>
-                                        <Link href="/terms">
+                                        <Link href="/contact">
                                             <button class="border-b border-gray-500 border-dotted hover:text-indigo-700 hover:font-bold">
                                                 Problems signing in?
                                             </button>
