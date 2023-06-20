@@ -1,4 +1,4 @@
-# Qwik City App ⚡️
+# Code Vista Frontend App 👀
 
 - [Qwik Docs](https://qwik.builder.io/)
 - [Discord](https://qwik.builder.io/chat)
@@ -68,8 +68,22 @@ npm run build # or `yarn build`
 
 This app has a minimal [Express server](https://expressjs.com/) implementation. After running a full build, you can preview the build using the command:
 
-```
+```shell
 npm run serve
 ```
 
 Then visit [http://localhost:8080/](http://localhost:8080/)
+
+## Docker
+
+To build your Docker image, you can use the --build-arg option to pass your environment variables:
+
+```shell
+docker build --build-arg VITE_SUPABASE_URL=<your_supabase_url> --build-arg VITE_SUPABASE_KEY=<your_supabase_anon_key> --build-arg VITE_SUPABASE_SECRET_KEY=<your_supabase_secret_key> -t <name-of-your-image>:<version> .
+```
+
+To create a image
+
+```shell
+docker run -d --name <name-of-your-container> -p 3000:3000 <name-of-your-image>:<version>
+```

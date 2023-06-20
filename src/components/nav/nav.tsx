@@ -21,9 +21,6 @@ export const Nav = component$(() => {
     const nav = useNavigate();
 
     const handleLogout = $(async () => {
-        // server side
-
-        // client side
         await supabase.auth.signOut();
         nav(homeUrl);
     });
